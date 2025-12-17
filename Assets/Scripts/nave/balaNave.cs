@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class Bala : MonoBehaviour
 {
-    public float velocidadBala = 30f;
-    public float tiempoVida = 3f;
+    public float tiempoVida = 5f; // Aumentado a 5 segundos
 
     private Rigidbody cuerpoRigido;
     private Camera camaraPrincipal;
     private float margenDestruccion = 1f;
+    private float velocidad;
 
-    void Start()
+    public void Inicializar(float velocidadBala, bool mirandoDerecha)
     {
+        velocidad = velocidadBala;
+
         cuerpoRigido = GetComponent<Rigidbody>();
         camaraPrincipal = Camera.main;
 
@@ -18,10 +20,10 @@ public class Bala : MonoBehaviour
         {
             cuerpoRigido.useGravity = false;
             cuerpoRigido.linearDamping = 0f;
-            cuerpoRigido.angularDamping = 0.5f;
+            cuerpoRigido.angularDamping = 0f;
 
-            Vector3 impulsoInicial = Vector3.right * velocidadBala;
-            cuerpoRigido.AddForce(impulsoInicial, ForceMode.VelocityChange);
+            // Usar velocity directo para movimiento limpio en línea recta
+            cuerpoRigido.linearVelocity = (mirandoDerecha ? Vector3.right : Vector3.left) * velocidad;
         }
 
         Destroy(gameObject, tiempoVida);

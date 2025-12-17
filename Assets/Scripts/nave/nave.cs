@@ -3,7 +3,7 @@ using UnityEngine;
 public class Nave : MonoBehaviour
 {
     public float velocidadMovimiento = 10f;
-    public float fuerzaDisparo = 800f;
+    public float velocidadDisparo = 30f; // Cambiado de fuerzaDisparo a velocidadDisparo
     public float amortiguacionLineal = 3f;
     public float amortiguacionAngular = 5f;
     public int vida = 3;
@@ -14,6 +14,7 @@ public class Nave : MonoBehaviour
 
     private Rigidbody cuerpoRigido;
     private bool estaMuerta = false;
+    private bool mirandoDerecha = true;
 
     void Start()
     {
@@ -59,23 +60,33 @@ public class Nave : MonoBehaviour
         movimiento = movimiento.normalized * velocidadMovimiento;
 
         cuerpoRigido.AddForce(movimiento, ForceMode.Force);
+
+        if (!estaMuerta && moverHorizontal != 0)
+        {
+            ActualizarOrientacion(moverHorizontal > 0);
+        }
+    }
+
+    void ActualizarOrientacion(bool derecha)
+    {
+        if (mirandoDerecha != derecha)
+        {
+            mirandoDerecha = derecha;
+            transform.rotation = Quaternion.Euler(0, derecha ? 0 : 180, 0);
+        }
     }
 
     void Disparar()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 direccionDisparo = Vector3.right;
+            GameObject bala = Instantiate(balaPrefab, puntoDisparo.position, transform.rotation);
 
-            GameObject bala = Instantiate(balaPrefab, puntoDisparo.position, Quaternion.identity);
-
-            Rigidbody cuerpoBala = bala.GetComponent<Rigidbody>();
-            if (cuerpoBala != null)
+            Bala scriptBala = bala.GetComponent<Bala>();
+            if (scriptBala != null)
             {
-                cuerpoBala.AddForce(direccionDisparo * fuerzaDisparo, ForceMode.Impulse);
+                scriptBala.Inicializar(velocidadDisparo, mirandoDerecha);
             }
-
-            bala.transform.rotation = transform.rotation;
         }
     }
 
@@ -98,13 +109,9 @@ public class Nave : MonoBehaviour
     void Morir()
     {
         estaMuerta = true;
-
         CrearExplosion();
-
         DetenerMovimiento();
-
         DesactivarNave();
-
         Destroy(gameObject, duracionExplosion);
     }
 
@@ -129,26 +136,17 @@ public class Nave : MonoBehaviour
     void DesactivarNave()
     {
         Renderer rendererNave = GetComponent<Renderer>();
-        if (rendererNave != null)
-        {
-            rendererNave.enabled = false;
-        }
+        if (rendererNave != null) rendererNave.enabled = false;
 
         Collider colliderNave = GetComponent<Collider>();
-        if (colliderNave != null)
-        {
-            colliderNave.enabled = false;
-        }
+        if (colliderNave != null) colliderNave.enabled = false;
 
         cuerpoRigido.isKinematic = true;
 
         foreach (Transform hijo in transform)
         {
             Renderer rendererHijo = hijo.GetComponent<Renderer>();
-            if (rendererHijo != null)
-            {
-                rendererHijo.enabled = false;
-            }
+            if (rendererHijo != null) rendererHijo.enabled = false;
         }
     }
 
@@ -157,10 +155,7 @@ public class Nave : MonoBehaviour
         if (!estaMuerta && otro.CompareTag("Bomba"))
         {
             Bomba bomba = otro.GetComponent<Bomba>();
-            if (bomba != null)
-            {
-                RecibirDanio(bomba.danio);
-            }
+            if (bomba != null) RecibirDanio(bomba.danio);
         }
     }
 }
