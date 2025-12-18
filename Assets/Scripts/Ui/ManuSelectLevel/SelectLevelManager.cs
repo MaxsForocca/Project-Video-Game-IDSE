@@ -8,7 +8,7 @@ public class SelectLevelManager : MonoBehaviour
     {
         if (sceneIndex >= 0 && sceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(sceneIndex);
+            SceneManager.LoadSceneAsync(sceneIndex);
         }
         else
         {
@@ -19,12 +19,12 @@ public class SelectLevelManager : MonoBehaviour
     // Cargar escena por nombre (opcional pero recomendable)
     public void LoadSceneByName(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadSceneAsync(sceneName);
     }
 
     // Salir del juego
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadSceneAsync(0);
     }
 }

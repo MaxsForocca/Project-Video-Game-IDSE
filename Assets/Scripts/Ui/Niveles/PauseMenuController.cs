@@ -6,7 +6,16 @@ public class PauseMenuController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject pauseMenu;
 
-    private bool isPaused = false;
+    private bool isPaused;
+
+    void Start()
+    {
+        pauseMenu.SetActive(false);
+        isPaused = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
     void Update()
     {
@@ -29,6 +38,9 @@ public class PauseMenuController : MonoBehaviour
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
         isPaused = true;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void ResumeGame()
@@ -36,11 +48,14 @@ public class PauseMenuController : MonoBehaviour
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         isPaused = false;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f; // MUY importante
-        SceneManager.LoadScene(0);
+        Time.timeScale = 1f;
+        SceneManager.LoadSceneAsync(0);
     }
 }

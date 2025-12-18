@@ -8,7 +8,7 @@ public class MenuButtons : MonoBehaviour
     {
         if (sceneIndex >= 0 && sceneIndex < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(sceneIndex);
+            SceneManager.LoadSceneAsync(sceneIndex);
         }
         else
         {
@@ -19,7 +19,7 @@ public class MenuButtons : MonoBehaviour
     // Cargar escena por nombre (opcional pero recomendable)
     public void LoadSceneByName(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadSceneAsync(sceneName);
     }
 
     // Salir del juego
