@@ -8,9 +8,16 @@ public class VidaEnemigo : MonoBehaviour
     public void RecibirDaño(int cantidad)
     {
         salud -= cantidad;
+
         if (salud <= 0)
         {
-            Morir();
+            //SUMAR PUNTOS AL MORIR ---
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.SumarPuntos(100);
+            }
+
+            Destroy(gameObject);
         }
     }
 

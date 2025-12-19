@@ -7,30 +7,26 @@ public class BalaEnemiga : MonoBehaviour
 
     void Update()
     {
-        // Se mueve hacia la IZQUIERDA (hacia el jugador)
-        // Usamos Space.World para que siempre vaya a la izquierda de la pantalla
         transform.Translate(Vector3.left * velocidad * Time.deltaTime, Space.World);
     }
 
     void OnTriggerEnter(Collider otro)
     {
-        // Si choca con el Jugador (Tu nave)
         if (otro.CompareTag("Player"))
         {
-            // Buscamos el script de vida de tu nave y le hacemos daño
             VidaNave vidaDelJugador = otro.GetComponent<VidaNave>();
 
             if (vidaDelJugador != null)
             {
-                vidaDelJugador.RecibirDaño(daño); // Usamos tu función existente
+                vidaDelJugador.RecibirDaño(daño);
             }
 
-            Destroy(gameObject); // La bala desaparece
+            Destroy(gameObject);
         }
     }
 
     void Start()
     {
-        Destroy(gameObject, 5f); // Autodestrucción si no choca con nada
+        Destroy(gameObject, 5f);
     }
 }

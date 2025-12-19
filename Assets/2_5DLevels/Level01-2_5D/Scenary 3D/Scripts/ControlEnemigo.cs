@@ -11,13 +11,12 @@ public class ControlEnemigo : MonoBehaviour
     public float sueloY = -4.5f;
 
     [Header("Movimiento de Seguimiento")]
-    public float velocidadHorizontal = 4f; // (Antes llamada 'velocidad')
-    // NUEVO: Velocidad para subir/bajar persiguiendo al jugador
+    public float velocidadHorizontal = 4f;
     public float velocidadVertical = 3f;
-    // --- NUEVO: AJUSTE MANUAL ---
+    
     [Tooltip("Pon un número negativo para que vuele más bajo, o positivo para más alto")]
     public float offsetVertical = 0f;
-    // ----------------------------
+    
 
     [Header("Disparo")]
     public GameObject balaPrefab;
@@ -27,14 +26,10 @@ public class ControlEnemigo : MonoBehaviour
     private Transform objetivoJugador;
     private float cronometroDisparo;
 
-    // variables para la suavidad (Ya no se usan)
-    // private float alturaBaseY;
-    // private float anguloSenoidal = 0f;
     private bool estaActivo = false;
 
     void Start()
     {
-        // alturaBaseY = transform.position.y; // Ya no hace falta
 
         GameObject jugador = GameObject.FindGameObjectWithTag("Player");
         if (jugador != null)
@@ -49,7 +44,6 @@ public class ControlEnemigo : MonoBehaviour
 
         float distancia = Vector3.Distance(transform.position, objetivoJugador.position);
 
-        // 1. Activación
         if (distancia < distanciaParaEmpezar)
         {
             estaActivo = true;
@@ -57,29 +51,22 @@ public class ControlEnemigo : MonoBehaviour
 
         if (estaActivo)
         {
-            // FASE A: Acercarse (Moverse a la izquierda)
+            // FASE A: Acercarse
             if (distancia > distanciaParaFrenar)
             {
-                // Usamos la nueva variable 'velocidadHorizontal'
                 transform.Translate(Vector3.left * velocidadHorizontal * Time.deltaTime, Space.World);
             }
 
-            // FASE B: PERSEGUIR VERTICALMENTE (El cambio importante está aquí)
-            // Ya no usamos 'else', queremos que persiga SIEMPRE que esté activo
-
-            // 1. ¿A qué altura está el jugador ahora mismo?
+            // FASE B: PERSEGUIR VERTICALMENTE
             float objetivoY = objetivoJugador.position.y + offsetVertical;
 
-            // 2. Nos movemos suavemente hacia esa meta
             float pasoVertical = velocidadVertical * Time.deltaTime;
             float nuevaY = Mathf.MoveTowards(transform.position.y, objetivoY, pasoVertical);
 
-            // 3. Respetamos los límites (¡Revisa que sueloY sea lo bastante bajo!)
             nuevaY = Mathf.Clamp(nuevaY, sueloY, techoY);
 
             transform.position = new Vector3(transform.position.x, nuevaY, transform.position.z);
 
-            // El disparo sigue igual
             GestionarDisparo();
         }
     }
