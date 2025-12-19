@@ -6,11 +6,16 @@ TagManager:
   tags:
   - Obstaculo
   - Final
+<<<<<<< HEAD
   - Enemigo
   - Disparo
   - Piso
   - limite
   - dead
+=======
+  - Dangerous
+  - Collectible
+>>>>>>> origin/maxs
   layers:
   - Default
   - TransparentFX
