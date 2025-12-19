@@ -12,7 +12,7 @@
         public Transform modeloNave; // hijo visual de la nave
 
         private float proximoDisparo = 0f;
-        private int direccionX = 1;
+        public int direccionX = 1;
         private Rigidbody rb;
 
         public bool controlActivo = true;
@@ -29,10 +29,13 @@
         }
 
         void Update()
+    {
+        if (controlActivo)
         {
             Mover();
             Disparar();
         }
+    }
 
         void Mover()
         {
@@ -98,7 +101,8 @@
 
     public void MoverAutomatico(Vector3 direccion, float velocidad)
     {
-        rb.MovePosition(rb.position + direccion.normalized * velocidad * Time.deltaTime);
+        transform.position += direccion.normalized * velocidad * Time.deltaTime;
     }
+
 
 }

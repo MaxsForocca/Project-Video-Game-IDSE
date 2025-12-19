@@ -2,7 +2,7 @@
 
 public class BossDorado : MonoBehaviour
 {
-    public int vida = 100000;
+    public int vida = 1000000;
     public GameObject particulasExplosion;
 
     public AudioClip sonidoMuerte;   // ← NUEVO

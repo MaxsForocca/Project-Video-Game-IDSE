@@ -1,24 +1,19 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class FinalNivel : MonoBehaviour
 {
     public Nave nave;
-
-    public float descenso = 2f;
-    public float velocidadDescenso = 1.5f;
-    public float velocidadDerecha = 1f;
-
+    public float velocidadMovimiento = 1.5f;
+    public float duracionMovimientoDerecha = 5f;
+    public float duracionDescenso = 2f;
     public TextMeshProUGUI textoFin;
     public TextMeshProUGUI textoGracias;
-
-    public CanvasGroup fadeNegro;
-
+    public CanvasGroup fondoNegro;
     public float duracionTexto = 5f;
     public float duracionFade = 2f;
-
+    public BombaSpawner[] spawners;
     bool iniciado = false;
 
     void Awake()
@@ -32,8 +27,8 @@ public class FinalNivel : MonoBehaviour
         if (textoGracias != null)
             textoGracias.gameObject.SetActive(false);
 
-        if (fadeNegro != null)
-            fadeNegro.alpha = 0f;
+        if (fondoNegro != null)
+            fondoNegro.alpha = 0f;
     }
 
     void Update()
@@ -45,38 +40,40 @@ public class FinalNivel : MonoBehaviour
         }
     }
 
-
     IEnumerator SecuenciaFinal()
     {
+        if (nave == null)
+            yield break;
+
         nave.DesactivarControl();
 
-        Vector3 inicio = nave.transform.position;
-        Vector3 destino = inicio + Vector3.down * descenso;
-
-        while (Vector3.Distance(nave.transform.position, destino) > 0.05f)
+        if (nave.modeloNave != null)
         {
-            nave.MoverAutomatico(Vector3.down, velocidadDescenso);
+            Vector3 s = nave.modeloNave.localScale;
+            s.x = Mathf.Abs(s.x);
+            nave.modeloNave.localScale = s;
+            nave.direccionX = 1;
+        }
+
+        foreach (var s in spawners)
+        {
+            if (s != null)
+                s.DesactivarSpawner();
+        }
+
+        float tiempo = 0f;
+        while (tiempo < duracionDescenso)
+        {
+            nave.MoverAutomatico(Vector3.down, velocidadMovimiento);
+            tiempo += Time.deltaTime;
             yield return null;
         }
 
-        textoFin.gameObject.SetActive(true);
-
-        float t = 0f;
-        while (t < duracionTexto)
+        tiempo = 0f;
+        while (tiempo < duracionMovimientoDerecha)
         {
-            nave.MoverAutomatico(Vector3.right, velocidadDerecha);
-            t += Time.deltaTime;
-            yield return null;
-        }
-
-        textoFin.gameObject.SetActive(false);
-        textoGracias.gameObject.SetActive(true);
-
-        t = 0f;
-        while (t < duracionTexto)
-        {
-            nave.MoverAutomatico(Vector3.right, velocidadDerecha);
-            t += Time.deltaTime;
+            nave.MoverAutomatico(Vector3.right, velocidadMovimiento);
+            tiempo += Time.deltaTime;
             yield return null;
         }
 
@@ -84,11 +81,19 @@ public class FinalNivel : MonoBehaviour
         while (a < 1f)
         {
             a += Time.deltaTime / duracionFade;
-            fadeNegro.alpha = a;
+            fondoNegro.alpha = a;
             yield return null;
         }
+        fondoNegro.alpha = 1f;
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        yield return new WaitForSeconds(5f);
+
+        textoFin.gameObject.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        textoFin.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(5f);
+
+        textoGracias.gameObject.SetActive(true);
     }
 }
-
