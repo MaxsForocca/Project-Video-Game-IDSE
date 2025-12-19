@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4436204791411591245}
   m_Layer: 0
-  m_Name: puntoDisparo
+  m_Name: PuntoDisparo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 8870602686481404228}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.3032923, y: 1.9552917, z: -71.37001}
+  m_LocalPosition: {x: -3.3, y: 1.9552917, z: -16.2}
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children: []

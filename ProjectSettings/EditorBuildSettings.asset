@@ -26,7 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Nivel05.unity
     guid: 5424ff0560eb4a8459983e5a3698b6a7
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/sss.unity
     guid: 78aec002307d6af4c8d8c85c6b0a7ee0
   - enabled: 1
@@ -35,7 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Nivel08.unity
     guid: 74bbf41ad4b8d004a96154e0904b1434
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/ss.unity
     guid: 9bab50cbcb3553840b46159bcc7cf5be
   - enabled: 1

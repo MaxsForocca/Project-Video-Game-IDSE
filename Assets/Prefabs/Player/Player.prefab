@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 797052399334828785}
   - component: {fileID: 111472069528761453}
   - component: {fileID: 7444180921177017698}
+  - component: {fileID: 1632438008428639114}
   - component: {fileID: 4298896278731318439}
   - component: {fileID: 6310769046163369739}
   m_Layer: 0
@@ -247,7 +248,7 @@ MonoBehaviour:
   rollMax: 30
   pitchMax: 15
   suavizado: 6
-  alturaFija: 10
+  usarAlturaFija: 1
 --- !u!114 &7444180921177017698
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +268,21 @@ MonoBehaviour:
   velocidadBala: 120
   cooldown: 0.08
   distanciaMaxima: 500
+--- !u!114 &1632438008428639114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4432331562641746291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e971d404899ed04d9594e22f09c4327, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saludMaxima: 100
+  saludActual: 0
+  "efectoDa\xF1o": {fileID: 0}
 --- !u!114 &4298896278731318439
 MonoBehaviour:
   m_ObjectHideFlags: 0
