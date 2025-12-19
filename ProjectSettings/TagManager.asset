@@ -6,9 +6,11 @@ TagManager:
   tags:
   - Obstaculo
   - Final
-  - Bala
-  - Nave
-  - Suelo
+  - Enemigo
+  - Disparo
+  - Piso
+  - limite
+  - dead
   layers:
   - Default
   - TransparentFX
