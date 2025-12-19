@@ -4,15 +4,20 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Obstaculo
-  - Final
   - Enemigo
-  - Disparo
-  - Piso
-  - limite
-  - dead
-  - Dangerous
-  - Collectible
+  - Obstaculo
+  - Proyectil
+  - Moneda
+  - Combustible
+  - Vida
+  - Puerta
+  - Llave
+  - Chatarra
+  - ZonaMuerte
+  - BalaTorreta
+  - Enemy
+  - Torreta
+  - Teletransporte
   layers:
   - Default
   - TransparentFX
@@ -22,11 +27,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemigo
+  - Obstaculo
+  - Proyectil
+  - Interactivo
   - 
   - 
   - 

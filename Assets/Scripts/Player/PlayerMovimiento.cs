@@ -1,64 +1,71 @@
-using UnityEngine;
+ï»¿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(PlayerSalud))]
 public class PlayerMovimiento : MonoBehaviour
 {
     [Header("Movimiento")]
-    public float velocidadMaxima = 60f;
-    public float aceleracion = 25f;
-    public float friccion = 10f;
-    public float velocidadGiro = 90f;
+    public float velocidadMaxima = 30f;   // Ajustado mÃ¡s lento
+    public float aceleracion = 3f;        // Ajustado mÃ¡s lento
+    public float friccion = 5f;
+    public float velocidadGiro = 50f;
 
-    [Header("Inclinación visual")]
-    public Transform modeloNave; // Asignar el hijo ModeloNave
+    [Header("InclinaciÃ³n visual")]
+    public Transform modeloNave;
     public float rollMax = 30f;
     public float pitchMax = 15f;
     public float suavizado = 6f;
 
     [Header("Altura fija")]
     public bool usarAlturaFija = true;
-    private float alturaInicial;
+
+    [Header("Teletransporte")]
+    public Vector3 posicionTeletransporte; // Coordenadas a donde se teletransporta
+    public string nombreEscenaSiguiente;   // Opcional, si quieres cambiar de escena
+    public float radioZonaTeletransporte = 2f; // Radio de activaciÃ³n
 
     private Rigidbody rb;
+    private PlayerSalud saludScript;
     private float velocidad;
     private float rollActual;
     private float pitchActual;
+    private float alturaInicial;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        saludScript = GetComponent<PlayerSalud>();
+
         rb.useGravity = false;
-        rb.isKinematic = false; // Permitimos física real
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-        // Solo rotaremos manualmente sobre Y, física manejará colisiones
 
         alturaInicial = transform.position.y;
     }
 
     void Update()
     {
+        if (!saludScript.EstaVivo()) return;
+
         ControlVelocidad();
         RotacionVisual();
+        RevisarTeletransporte();
     }
 
     void FixedUpdate()
     {
-        // Dirección horizontal plana
-        Vector3 direccionPlana = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
+        if (!saludScript.EstaVivo()) return;
 
-        // Movimiento usando Rigidbody para respetar colisiones
-        Vector3 movimiento = direccionPlana * velocidad * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + movimiento);
+        Vector3 velocidadFinal = transform.forward * velocidad;
+        rb.linearVelocity = new Vector3(velocidadFinal.x, 0f, velocidadFinal.z);
 
-        // Mantener altura relativa al inicio si está activada
         if (usarAlturaFija)
         {
-            Vector3 pos = rb.position;
-            rb.MovePosition(new Vector3(pos.x, alturaInicial, pos.z));
+            rb.position = new Vector3(rb.position.x, alturaInicial, rb.position.z);
         }
-
-        // Limitar velocidad máxima
-        velocidad = Mathf.Clamp(velocidad, -velocidadMaxima * 0.3f, velocidadMaxima);
     }
 
     void ControlVelocidad()
@@ -68,7 +75,9 @@ public class PlayerMovimiento : MonoBehaviour
         else if (Input.GetKey(KeyCode.S))
             velocidad -= aceleracion * Time.deltaTime;
         else
-            velocidad = Mathf.MoveTowards(velocidad, 0, friccion * Time.deltaTime);
+            velocidad = Mathf.MoveTowards(velocidad, 0f, friccion * Time.deltaTime);
+
+        velocidad = Mathf.Clamp(velocidad, -velocidadMaxima * 0.3f, velocidadMaxima);
     }
 
     void RotacionVisual()
@@ -76,10 +85,13 @@ public class PlayerMovimiento : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        // Giro real (YAW) del Player
-        transform.Rotate(0f, h * velocidadGiro * Time.deltaTime, 0f, Space.World);
+        Quaternion nuevaRotacion = Quaternion.Euler(
+            0f,
+            rb.rotation.eulerAngles.y + h * velocidadGiro * Time.fixedDeltaTime,
+            0f
+        );
+        rb.MoveRotation(nuevaRotacion);
 
-        // Giro visual del ModeloNave
         if (modeloNave != null)
         {
             float rollObjetivo = -h * rollMax;
@@ -89,6 +101,27 @@ public class PlayerMovimiento : MonoBehaviour
             pitchActual = Mathf.Lerp(pitchActual, pitchObjetivo, Time.deltaTime * suavizado);
 
             modeloNave.localRotation = Quaternion.Euler(pitchActual, 0f, rollActual);
+        }
+    }
+
+    // ---------------- TELETRANSPORTE ----------------
+    void RevisarTeletransporte()
+    {
+        float distancia = Vector3.Distance(transform.position, posicionTeletransporte);
+
+        if (distancia <= radioZonaTeletransporte)
+        {
+            if (!string.IsNullOrEmpty(nombreEscenaSiguiente))
+            {
+                // Teletransportar a otra escena
+                SceneManager.LoadScene(nombreEscenaSiguiente);
+            }
+            else
+            {
+                // Teletransportar a posiciÃ³n dentro de la misma escena
+                transform.position = posicionTeletransporte;
+                Debug.Log("Â¡Teletransportado dentro de la misma escena!");
+            }
         }
     }
 }
