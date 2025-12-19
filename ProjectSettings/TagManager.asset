@@ -6,18 +6,6 @@ TagManager:
   tags:
   - Enemigo
   - Obstaculo
-  - Proyectil
-  - Moneda
-  - Combustible
-  - Vida
-  - Puerta
-  - Llave
-  - Chatarra
-  - ZonaMuerte
-  - BalaTorreta
-  - Enemy
-  - Torreta
-  - Teletransporte
   layers:
   - Default
   - TransparentFX
