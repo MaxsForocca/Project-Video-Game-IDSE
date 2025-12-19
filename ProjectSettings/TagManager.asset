@@ -8,6 +8,9 @@ TagManager:
   - Final
   - Enemigo
   - Disparo
+  - Piso
+  - limite
+  - dead
   layers:
   - Default
   - TransparentFX
