@@ -162,6 +162,10 @@ public class SpaceshipController : MonoBehaviour
         Debug.Log("Nave destruida!");
         // Aquí puedes agregar efectos de muerte, game over, etc.
         // Ejemplo: Destroy(gameObject);
+        if (gameOverMenu != null)
+        {
+            gameOverMenu.TriggerGameOver();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -210,4 +214,7 @@ public class SpaceshipController : MonoBehaviour
     public float GetCurrentFuel() => currentFuel;
     public float GetCurrentHealth() => currentHealth;
     public bool IsAlive() => isAlive;
-}   
+
+    [SerializeField] private GameOverMenuController gameOverMenu;
+
+}
