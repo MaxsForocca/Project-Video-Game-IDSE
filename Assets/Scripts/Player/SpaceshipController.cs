@@ -173,6 +173,27 @@ public class SpaceshipController : MonoBehaviour
         }
     }
 
+    [Header("Box Limites")]
+    [SerializeField] private BoxCollider levelBounds;
+
+    private void LateUpdate()
+    {
+        ClampToBounds();
+    }
+
+    private void ClampToBounds()
+    {
+        if (levelBounds == null) return;
+
+        Bounds b = levelBounds.bounds;
+        Vector3 pos = transform.position;
+
+        pos.x = Mathf.Clamp(pos.x, b.min.x, b.max.x);
+        pos.y = Mathf.Clamp(pos.y, b.min.y, b.max.y);
+
+        transform.position = pos;
+    }
+
     // Método público para recargar combustible (útil para power-ups)
     public void RefillFuel(float amount)
     {
@@ -189,4 +210,4 @@ public class SpaceshipController : MonoBehaviour
     public float GetCurrentFuel() => currentFuel;
     public float GetCurrentHealth() => currentHealth;
     public bool IsAlive() => isAlive;
-}
+}   
