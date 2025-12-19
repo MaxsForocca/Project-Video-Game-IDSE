@@ -1,0 +1,126 @@
+[33mcommit f29656b5559ef007699cb6388261d0719c913bd6[m[33m ([m[1;36mHEAD -> [m[1;32mjeferson[m[33m, [m[1;31morigin/jeferson[m[33m)[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:27:15 2025 -0500
+
+    Prefabs Level 1
+
+[33mcommit 20c05aa412db3d12ecb36fcb730c544d5b784c87[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:26:52 2025 -0500
+
+    Prueba
+
+[33mcommit a7c6bb1ee92e888248eb073696919a64e5f5ae2c[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:26:16 2025 -0500
+
+    Scripts Level 1
+
+[33mcommit 794012198fec146a41e45c56cc3285823b053850[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:25:29 2025 -0500
+
+    Background Level 1
+
+[33mcommit 1e5a1e31442adf40f509306f80872128f575b0c7[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:25:12 2025 -0500
+
+    Prueba
+
+[33mcommit 4a5da123e8a197f3e3387929b08eb4d534c8033c[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:24:37 2025 -0500
+
+    Delete
+
+[33mcommit 3aee29e662cf9cf9441ffae2533b791238e7505d[m
+Author: Jeferson Basurco <132604488+Jeferson1014@users.noreply.github.com>
+Date:   Tue Dec 16 13:21:14 2025 -0500
+
+    Background Level 1
+
+[33mcommit 24f52125ed9f3eb8cae584c193c467fdb3798449[m
+Author: jperezh04 <tu_email@ejemplo.com>
+Date:   Tue Dec 16 00:10:48 2025 -0500
+
+    Comienzo nivel 3
+
+[33mcommit 58370d919837c3853225caac33c97cc309e97270[m
+Author: jperezh04 <tu_email@ejemplo.com>
+Date:   Mon Dec 15 08:40:22 2025 -0500
+
+    Pequeño arreglo
+
+[33mcommit 1e6e7ff92b1621e034b3c4de538798d7ab94861c[m
+Author: jperezh04 <tu_email@ejemplo.com>
+Date:   Mon Dec 15 08:36:16 2025 -0500
+
+    Correcciones nivel 2
+
+[33mcommit 543e1e2dd065f5b212082624cf9aca3001ffb3bf[m
+Author: jperezh04 <tu_email@ejemplo.com>
+Date:   Mon Dec 15 04:12:04 2025 -0500
+
+    NO ERRORES!!!
+
+[33mcommit 983af2b79120d093c85133e1a4669b3936cf4dee[m
+Merge: acaf3b2 29fe09e
+Author: jperezh04 <tu_email@ejemplo.com>
+Date:   Mon Dec 15 03:55:01 2025 -0500
+
+    Merge branch 'main' of https://github.com/MaxsForocca/Project-Video-Game-IDSE
+
+[33mcommit acaf3b28face3f01bf635be301f4bbb70aa8df8f[m
+Author: jperezh04 <tu_email@ejemplo.com>
+Date:   Mon Dec 15 03:45:24 2025 -0500
+
+    Estructura nivel 2 hecha
+
+[33mcommit 29fe09e89533634eb6b317662275984cb86c6765[m
+Author: MaxsForocca <mforocca@unsa.edu.pe>
+Date:   Mon Dec 15 02:51:11 2025 -0500
+
+    avance de nivel 5
+
+[33mcommit e262a027a3f7ecffffdc6e9c1c05ee825b89346a[m
+Author: MaxsForocca <mforocca@unsa.edu.pe>
+Date:   Mon Dec 15 01:55:38 2025 -0500
+
+    UI inicio y seleccion de niveles
+
+[33mcommit 926bae6cdca07107f18ebafc76f34a0925ddc944[m
+Author: MaxsForocca <mforocca@unsa.edu.pe>
+Date:   Sun Dec 14 19:09:43 2025 -0500
+
+    UI basica
+
+[33mcommit 5eb580054e737a235a16e6fecabfaa210e3b5319[m
+Author: MaxsForocca <mforocca@unsa.edu.pe>
+Date:   Sat Dec 13 01:45:25 2025 -0500
+
+    Backgorund Level 2,5,8,10,11,12
+
+[33mcommit 390b20b46a4840bc15b02993bdbf35b0bebec4bb[m
+Author: MaxsForocca <mforocca@unsa.edu.pe>
+Date:   Sun Dec 7 22:35:03 2025 -0500
+
+    new models for level 5
+
+[33mcommit 59ae7a86215bd1c23f42d97e5584a655d07e3a80[m
+Author: MaxsForocca <mforocca@unsa.edu.pe>
+Date:   Sun Dec 7 02:00:09 2025 -0500
+
+    enviroment level 5
+
+[33mcommit 2e6030655764fdfa631c7b12f171c221ef805507[m
+Author: MaxsForocca <121203558+MaxsForocca@users.noreply.github.com>
+Date:   Fri Nov 21 13:58:28 2025 -0500
+
+    Add Library directory to .gitignore
+
+[33mcommit 22045056224e4d4d7421cd33a9fda1c3e70eaf27[m
+Author: MaxsForocca <121203558+MaxsForocca@users.noreply.github.com>
+Date:   Fri Nov 21 13:55:02 2025 -0500
+
+    Initial commit
