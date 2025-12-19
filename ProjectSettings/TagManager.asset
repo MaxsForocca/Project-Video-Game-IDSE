@@ -11,6 +11,8 @@ TagManager:
   - Piso
   - limite
   - dead
+  - Dangerous
+  - Collectible
   layers:
   - Default
   - TransparentFX
