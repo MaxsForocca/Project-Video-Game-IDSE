@@ -1,70 +1,104 @@
-using UnityEngine;
+    using UnityEngine;
 
-public class Nave : MonoBehaviour
-{
-    public float velocidadMovimiento = 5f;
-    public int vida = 3;
-
-    public GameObject prefabDisparo;
-    public Transform puntoDisparo;
-    public float tiempoEntreDisparos = 0.25f;
-
-    private float proximoDisparo = 0f;
-    private int direccionX = 1;
-
-    void Update()
+    [RequireComponent(typeof(Rigidbody))]
+    public class Nave : MonoBehaviour
     {
-        Mover();
-        Disparar();
-    }
+        public float velocidadMovimiento = 5f;
+        public double vida = 20.0;
 
-    void Mover()
-    {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        public GameObject prefabDisparo;
+        public Transform puntoDisparo;
+        public float tiempoEntreDisparos = 0.25f;
+        public Transform modeloNave; // hijo visual de la nave
 
-        Vector3 movimiento = new Vector3(h, v, 0f).normalized;
-        transform.position += movimiento * velocidadMovimiento * Time.deltaTime;
+        private float proximoDisparo = 0f;
+        private int direccionX = 1;
+        private Rigidbody rb;
 
-        if (h > 0f)
+        public bool controlActivo = true;
+
+
+    void Start()
         {
-            direccionX = 1;
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        }
-        else if (h < 0f)
-        {
-            direccionX = -1;
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-        }
-    }
+            rb = GetComponent<Rigidbody>();
 
-    void Disparar()
-    {
-        if (Input.GetMouseButton(0) && Time.time >= proximoDisparo)
-        {
-            GameObject disparo = Instantiate(
-                prefabDisparo,
-                puntoDisparo.position,
-                Quaternion.identity
-            );
-
-            Bala bala = disparo.GetComponent<Bala>();
-            if (bala != null)
+            if (modeloNave == null && transform.childCount > 0)
             {
-                bala.SetDireccion(direccionX);
+                modeloNave = transform.GetChild(0);
             }
-
-            proximoDisparo = Time.time + tiempoEntreDisparos;
         }
-    }
 
-    public void RecibirDanio(int danio)
-    {
-        vida -= danio;
-
-        if (vida <= 0)
+        void Update()
         {
-            Destroy(gameObject);
+            Mover();
+            Disparar();
         }
+
+        void Mover()
+        {
+            float h = Input.GetAxisRaw("Horizontal");
+            float v = Input.GetAxisRaw("Vertical");
+
+            Vector3 movimiento = new Vector3(h, v, 0f).normalized;
+            rb.MovePosition(rb.position + movimiento * velocidadMovimiento * Time.deltaTime);
+
+            if (modeloNave != null)
+            {
+                if (h > 0f)
+                {
+                    direccionX = 1;
+                    Vector3 s = modeloNave.localScale;
+                    s.x = Mathf.Abs(s.x);
+                    modeloNave.localScale = s;
+                }
+                else if (h < 0f)
+                {
+                    direccionX = -1;
+                    Vector3 s = modeloNave.localScale;
+                    s.x = -Mathf.Abs(s.x);
+                    modeloNave.localScale = s;
+                }
+            }
+        }
+
+        void Disparar()
+        {
+            if (Input.GetMouseButton(0) && Time.time >= proximoDisparo)
+            {
+                GameObject disparo = Instantiate(
+                    prefabDisparo,
+                    puntoDisparo.position,
+                    Quaternion.identity
+                );
+
+                Bala bala = disparo.GetComponent<Bala>();
+                if (bala != null)
+                    bala.SetDireccion(direccionX);
+
+                proximoDisparo = Time.time + tiempoEntreDisparos;
+            }
+        }
+
+        public void RecibirDanio(double danio)
+        {
+            vida -= danio;
+
+            if (vida <= 0)
+                Destroy(gameObject);
+        }
+    public void DesactivarControl()
+    {
+        controlActivo = false;
     }
+
+    public void ActivarControl()
+    {
+        controlActivo = true;
+    }
+
+    public void MoverAutomatico(Vector3 direccion, float velocidad)
+    {
+        rb.MovePosition(rb.position + direccion.normalized * velocidad * Time.deltaTime);
+    }
+
 }
