@@ -24,7 +24,7 @@ Material:
     RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
-  m_LockedProperties: _Smoothness
+  m_LockedProperties: _DetailNormalMap _DetailNormalMapScale _Smoothness
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -33,15 +33,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: e9af027292fae424898c1b9cf0488184, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3a061fe6d8928b94099436eec6e21379, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
-        m_Texture: {fileID: 2800000, guid: 45736ff67a1471e4abfa00878e96b263, type: 3}
+        m_Texture: {fileID: 2800000, guid: 05fc587e39d43c14280e2a5c8048371e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailMask:
-        m_Texture: {fileID: 2800000, guid: 0eacd7dca367ec94698b161a3802e23b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 75070450585bdb840be72d06a3be66ec, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailNormalMap:
