@@ -1,125 +1,94 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovimientoAvion : MonoBehaviour
+public class PlayerMovimiento : MonoBehaviour
 {
-    [Header("Sonido")]
-    public AudioSource motor;
-
-    [Header("Velocidad y Movimiento")]
-    public float velocidadMaxima = 70f;
-    public float aceleracion = 20f;
-    public float friccion = 5f;
-
+    [Header("Movimiento")]
+    public float velocidadMaxima = 60f;
+    public float aceleracion = 25f;
+    public float friccion = 10f;
     public float velocidadGiro = 90f;
-    public float rollSpeed = 50f;
-    public float pitchSpeed = 30f; // Para subir/bajar con inclinación
 
-    public float velocidadAscenso = 20f;
-    public float alturaMax = 50f;
-    public float alturaMin = 0f;
+    [Header("InclinaciÃ³n visual")]
+    public Transform modeloNave; // Asignar el hijo ModeloNave
+    public float rollMax = 30f;
+    public float pitchMax = 15f;
+    public float suavizado = 6f;
+
+    [Header("Altura fija")]
+    public bool usarAlturaFija = true;
+    private float alturaInicial;
 
     private Rigidbody rb;
-    private float velocidad = 0f;
+    private float velocidad;
+    private float rollActual;
+    private float pitchActual;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
-        rb.linearDamping = 0.1f;
-        rb.angularDamping = 0.05f;
+        rb.isKinematic = false; // Permitimos fÃ­sica real
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        // Solo rotaremos manualmente sobre Y, fÃ­sica manejarÃ¡ colisiones
+
+        alturaInicial = transform.position.y;
     }
 
     void Update()
     {
-        ProcesarTeclado();
-        Rotar();
-        ActualizarSonidoMotor();
+        ControlVelocidad();
+        RotacionVisual();
     }
 
     void FixedUpdate()
     {
-        // Movimiento adelante/atrás
-        Vector3 mover = transform.forward * velocidad * Time.fixedDeltaTime;
+        // DirecciÃ³n horizontal plana
+        Vector3 direccionPlana = new Vector3(transform.forward.x, 0f, transform.forward.z).normalized;
 
-        // Ascenso / descenso usando W y S
-        float altInput = 0f;
-        if (Input.GetKey(KeyCode.W)) altInput = 1f;  // Subir
-        if (Input.GetKey(KeyCode.S)) altInput = -1f; // Bajar
+        // Movimiento usando Rigidbody para respetar colisiones
+        Vector3 movimiento = direccionPlana * velocidad * Time.fixedDeltaTime;
+        rb.MovePosition(rb.position + movimiento);
 
-        Vector3 altura = Vector3.up * altInput * velocidadAscenso * Time.fixedDeltaTime;
-
-        // Descenso natural si no se presiona nada
-        if (altInput == 0f && transform.position.y > alturaMin)
+        // Mantener altura relativa al inicio si estÃ¡ activada
+        if (usarAlturaFija)
         {
-            altura = Vector3.down * velocidadAscenso * 0.5f * Time.fixedDeltaTime;
+            Vector3 pos = rb.position;
+            rb.MovePosition(new Vector3(pos.x, alturaInicial, pos.z));
         }
 
-        rb.MovePosition(rb.position + mover + altura);
+        // Limitar velocidad mÃ¡xima
+        velocidad = Mathf.Clamp(velocidad, -velocidadMaxima * 0.3f, velocidadMaxima);
     }
 
-    private void ProcesarTeclado()
+    void ControlVelocidad()
     {
-        bool teclaPresionada = false;
-
-        // Aceleración hacia adelante/atrás
         if (Input.GetKey(KeyCode.W))
-        {
-            teclaPresionada = true;
-            if (velocidad < velocidadMaxima)
-                velocidad += aceleracion * Time.deltaTime;
-        }
+            velocidad += aceleracion * Time.deltaTime;
         else if (Input.GetKey(KeyCode.S))
+            velocidad -= aceleracion * Time.deltaTime;
+        else
+            velocidad = Mathf.MoveTowards(velocidad, 0, friccion * Time.deltaTime);
+    }
+
+    void RotacionVisual()
+    {
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+
+        // Giro real (YAW) del Player
+        transform.Rotate(0f, h * velocidadGiro * Time.deltaTime, 0f, Space.World);
+
+        // Giro visual del ModeloNave
+        if (modeloNave != null)
         {
-            teclaPresionada = true;
-            if (velocidad > -velocidadMaxima / 5f)
-                velocidad -= aceleracion * Time.deltaTime;
+            float rollObjetivo = -h * rollMax;
+            float pitchObjetivo = -v * pitchMax;
+
+            rollActual = Mathf.Lerp(rollActual, rollObjetivo, Time.deltaTime * suavizado);
+            pitchActual = Mathf.Lerp(pitchActual, pitchObjetivo, Time.deltaTime * suavizado);
+
+            modeloNave.localRotation = Quaternion.Euler(pitchActual, 0f, rollActual);
         }
-
-        // Fricción natural
-        if (!teclaPresionada)
-        {
-            if (velocidad > 0)
-                velocidad -= friccion * Time.deltaTime;
-            else if (velocidad < 0)
-                velocidad += friccion * Time.deltaTime;
-        }
-
-        // Limitar velocidad
-        velocidad = Mathf.Clamp(velocidad, -velocidadMaxima / 5f, velocidadMaxima);
-    }
-
-    private void Rotar()
-    {
-        // Giro horizontal (yaw)
-        float giroY = 0f;
-        if (Input.GetKey(KeyCode.A)) giroY = -velocidadGiro * Time.deltaTime;
-        if (Input.GetKey(KeyCode.D)) giroY = velocidadGiro * Time.deltaTime;
-
-        // Roll (inclinación lateral)
-        float roll = 0f;
-        if (Input.GetKey(KeyCode.Q)) roll = rollSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.E)) roll = -rollSpeed * Time.deltaTime;
-
-        // Pitch (inclinación al subir/bajar)
-        float pitch = 0f;
-        if (Input.GetKey(KeyCode.W)) pitch = -pitchSpeed * Time.deltaTime;
-        if (Input.GetKey(KeyCode.S)) pitch = pitchSpeed * Time.deltaTime;
-
-        // Aplicar rotación
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(pitch, giroY, roll));
-    }
-
-    private void ActualizarSonidoMotor()
-    {
-        if (motor == null) return;
-        motor.pitch = Mathf.Clamp(velocidad / 10f, 0.5f, 1.5f);
-        if (!motor.isPlaying)
-            motor.Play();
-    }
-
-    public float GetVelocidad()
-    {
-        return velocidad;
     }
 }

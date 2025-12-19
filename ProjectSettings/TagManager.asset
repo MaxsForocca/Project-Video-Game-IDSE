@@ -14,6 +14,7 @@ TagManager:
   - Llave
   - Chatarra
   - ZonaMuerte
+  - BalaTorreta
   layers:
   - Default
   - TransparentFX
