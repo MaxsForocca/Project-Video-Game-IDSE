@@ -9,6 +9,9 @@ TagManager:
   - Bala
   - Nave
   - Suelo
+  - Ground
+  - LeftLimit
+  - RightLimit
   layers:
   - Default
   - TransparentFX

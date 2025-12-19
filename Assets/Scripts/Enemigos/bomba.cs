@@ -6,44 +6,34 @@ public class Bomba : MonoBehaviour
     public float amplitud = 1f;
     public float frecuencia = 2f;
     public int danio = 1;
+
     public GameObject efectoExplosion;
     public float duracionExplosion = 1f;
     public float radioExplosion = 3f;
-    public float distanciaActivacion = 20f;
+
     public float tiempoMaximoVida = 7f;
 
     private Vector3 posicionInicial;
     private bool explotando = false;
-    private bool activa = false;
+    private float tiempoVida = 0f;
+
     private Rigidbody cuerpoRigido;
-    private float tiempoActiva = 0f;
-    private GameObject nave;
-    private Renderer rendererBomba;
-    private Collider colliderBomba;
+    private float direccionX = -1f;
+
+    public void SetDireccion(bool haciaDerecha)
+    {
+        direccionX = haciaDerecha ? 1f : -1f;
+    }
 
     void Start()
     {
         posicionInicial = transform.position;
+
         cuerpoRigido = GetComponent<Rigidbody>();
-        rendererBomba = GetComponent<Renderer>();
-        colliderBomba = GetComponent<Collider>();
-
-        nave = GameObject.FindGameObjectWithTag("Nave");
-
         if (cuerpoRigido != null)
         {
             cuerpoRigido.useGravity = false;
             cuerpoRigido.isKinematic = true;
-        }
-
-        if (colliderBomba != null)
-        {
-            colliderBomba.enabled = false;
-        }
-
-        if (rendererBomba != null)
-        {
-            rendererBomba.enabled = false;
         }
     }
 
@@ -51,57 +41,16 @@ public class Bomba : MonoBehaviour
     {
         if (explotando) return;
 
-        if (!activa)
-        {
-            VerificarActivacion();
-        }
-        else
-        {
-            MoverBomba();
-            VerificarTiempoVida();
-        }
-    }
-
-    void VerificarActivacion()
-    {
-        if (nave != null)
-        {
-            float distancia = Vector3.Distance(transform.position, nave.transform.position);
-
-            if (distancia <= distanciaActivacion)
-            {
-                ActivarBomba();
-            }
-        }
-    }
-
-    void ActivarBomba()
-    {
-        activa = true;
-        posicionInicial = transform.position;
-
-        if (cuerpoRigido != null)
-        {
-            cuerpoRigido.isKinematic = false;
-        }
-
-        if (colliderBomba != null)
-        {
-            colliderBomba.enabled = true;
-        }
-
-        if (rendererBomba != null)
-        {
-            rendererBomba.enabled = true;
-        }
+        MoverBomba();
+        VerificarTiempoVida();
     }
 
     void MoverBomba()
     {
-        float nuevoY = posicionInicial.y + Mathf.Sin(Time.time * frecuencia) * amplitud;
+        float nuevoY = posicionInicial.y + Mathf.Sin(tiempoVida * frecuencia) * amplitud;
 
         transform.position = new Vector3(
-            transform.position.x - velocidad * Time.deltaTime,
+            transform.position.x + direccionX * velocidad * Time.deltaTime,
             nuevoY,
             transform.position.z
         );
@@ -109,9 +58,9 @@ public class Bomba : MonoBehaviour
 
     void VerificarTiempoVida()
     {
-        tiempoActiva += Time.deltaTime;
+        tiempoVida += Time.deltaTime;
 
-        if (tiempoActiva >= tiempoMaximoVida)
+        if (tiempoVida >= tiempoMaximoVida)
         {
             Explotar();
         }
@@ -119,7 +68,7 @@ public class Bomba : MonoBehaviour
 
     void OnTriggerEnter(Collider otro)
     {
-        if (explotando || !activa) return;
+        if (explotando) return;
 
         if (otro.CompareTag("Nave") || otro.CompareTag("Bala"))
         {
@@ -133,49 +82,35 @@ public class Bomba : MonoBehaviour
 
         if (efectoExplosion != null)
         {
-            GameObject explosion = Instantiate(efectoExplosion, transform.position, Quaternion.identity);
+            GameObject explosion = Instantiate(
+                efectoExplosion,
+                transform.position,
+                Quaternion.identity
+            );
+
             Destroy(explosion, duracionExplosion);
         }
 
         AplicarDanioAlrededor();
 
-        DesactivarBombaVisual();
-
-        Destroy(gameObject, duracionExplosion);
+        Destroy(gameObject);
     }
 
     void AplicarDanioAlrededor()
     {
-        Collider[] objetosCercanos = Physics.OverlapSphere(transform.position, radioExplosion);
+        Collider[] objetosCercanos =
+            Physics.OverlapSphere(transform.position, radioExplosion);
 
-        foreach (Collider colisionador in objetosCercanos)
+        foreach (Collider col in objetosCercanos)
         {
-            if (colisionador.CompareTag("Nave"))
+            if (col.CompareTag("Nave"))
             {
-                Nave naveComponente = colisionador.GetComponent<Nave>();
-                if (naveComponente != null)
+                Nave nave = col.GetComponent<Nave>();
+                if (nave != null)
                 {
-                    naveComponente.RecibirDanio(danio);
+                    nave.RecibirDanio(danio);
                 }
             }
-        }
-    }
-
-    void DesactivarBombaVisual()
-    {
-        if (rendererBomba != null)
-        {
-            rendererBomba.enabled = false;
-        }
-
-        if (colliderBomba != null)
-        {
-            colliderBomba.enabled = false;
-        }
-
-        if (cuerpoRigido != null)
-        {
-            cuerpoRigido.isKinematic = true;
         }
     }
 }

@@ -1,32 +1,30 @@
 using UnityEngine;
 
-public class CamaraNave : MonoBehaviour
+public class CamaraSeguir : MonoBehaviour
 {
-    public Transform nave;
-    public float suavidad = 0.15f;
-    public Vector3 offset = new Vector3(0f, 0f, -10f);
+    public Transform objetivo;
+    public float suavizado = 5f;
 
-    private Vector3 velocidad = Vector3.zero;
+    private Vector3 posicionInicialCamara;
+    private Vector3 posicionInicialObjetivo;
 
     void Start()
     {
-        if (nave == null)
-        {
-            GameObject objetoNave = GameObject.FindGameObjectWithTag("Nave");
-            if (objetoNave != null)
-            {
-                nave = objetoNave.transform;
-            }
-        }
+        posicionInicialCamara = transform.position;
+        posicionInicialObjetivo = objetivo.position;
     }
 
     void LateUpdate()
     {
-        if (nave == null) return;
+        if (objetivo == null) return;
 
-        Vector3 posicionDeseada = nave.position + offset;
-        Vector3 posicionSuavizada = Vector3.SmoothDamp(transform.position, posicionDeseada, ref velocidad, suavidad);
+        Vector3 delta = objetivo.position - posicionInicialObjetivo;
+        Vector3 posicionDeseada = posicionInicialCamara + delta;
 
-        transform.position = posicionSuavizada;
+        transform.position = Vector3.Lerp(
+            transform.position,
+            posicionDeseada,
+            suavizado * Time.deltaTime
+        );
     }
 }
