@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Obstaculo
   - Final
+  - Bala
+  - Nave
+  - Suelo
   layers:
   - Default
   - TransparentFX

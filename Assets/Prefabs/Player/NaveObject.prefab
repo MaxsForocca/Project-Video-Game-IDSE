@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 984502263501428772}
+  - component: {fileID: -5827633852335597208}
   m_Layer: 0
   m_Name: NaveObject
   m_TagString: Untagged
@@ -32,6 +33,22 @@ Transform:
   - {fileID: 5185803178397932548}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5827633852335597208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070547013524675828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d330c518600f999488e3d6efa952b27e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocidad: 6
+  bala: {fileID: 0}
+  puntoDisparo: {fileID: 0}
+  tiempoEntreDisparos: 0.25
 --- !u!1001 &4646894573820148719
 PrefabInstance:
   m_ObjectHideFlags: 0
